@@ -1,0 +1,5 @@
+{
+  "SUPABASE_URL": "https://YOUR-PROJECT.supabase.co",
+  "SUPABASE_PUBLISHABLE_KEY": "sb_publishable_... (or the legacy anon key)",
+  "SERVER_URL": "http://localhost:8080/"
+}

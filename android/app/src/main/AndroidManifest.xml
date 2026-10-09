@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Talks to Supabase and the game server. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="game_goft"
         android:name="${applicationName}"

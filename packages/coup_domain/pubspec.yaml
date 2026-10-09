@@ -1,0 +1,10 @@
+name: coup_domain
+description: Rules of the Coup card game. Pure Dart, shared by the app and the game server.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.7
+dev_dependencies:
+  test: ^1.31.1
+  lints: ^6.1.0

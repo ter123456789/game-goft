@@ -4,4 +4,6 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Debug only: allow http:// to a local game server (e.g. 10.0.2.2:8080). -->
+    <application android:usesCleartextTraffic="true"/>
 </manifest>

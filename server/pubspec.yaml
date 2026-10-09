@@ -1,0 +1,17 @@
+name: coup_server
+description: Authoritative Coup game server. Runs the rules, writes per-player views to Supabase.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  coup_domain:
+    path: ../packages/coup_domain
+  shelf: ^1.4.2
+  shelf_router: ^1.1.4
+  supabase: ^2.16.2
+dev_dependencies:
+  test: ^1.31.1
+  lints: ^6.1.0
