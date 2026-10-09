@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../application/game_api.dart';
@@ -18,8 +20,31 @@ class _HomeScreenState extends State<HomeScreen> {
   final _code = TextEditingController();
   var _busy = false;
 
+  /// null while checking.
+  bool? _serverReady;
+
+  /// Pings now and then so a free host doesn't put the server to sleep
+  /// mid-game. This screen stays mounted under the lobby and the table.
+  late final Timer _keepAwake;
+
+  @override
+  void initState() {
+    super.initState();
+    _wakeServer();
+    _keepAwake = Timer.periodic(
+      const Duration(minutes: 10),
+      (_) => _wakeServer(),
+    );
+  }
+
+  Future<void> _wakeServer() async {
+    final ready = await widget.services.api.wakeUp();
+    if (mounted) setState(() => _serverReady = ready);
+  }
+
   @override
   void dispose() {
+    _keepAwake.cancel();
     _name.dispose();
     _code.dispose();
     super.dispose();
@@ -60,6 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          _ServerStatus(
+            ready: _serverReady,
+            onRetry: () {
+              setState(() => _serverReady = null);
+              _wakeServer();
+            },
+          ),
           TextField(
             controller: _name,
             maxLength: 32,
@@ -104,4 +136,36 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+class _ServerStatus extends StatelessWidget {
+  const _ServerStatus({required this.ready, required this.onRetry});
+
+  final bool? ready;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) => switch (ready) {
+    true => const SizedBox.shrink(),
+    null => const Padding(
+      padding: EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('กำลังเชื่อมต่อ server… (ครั้งแรกอาจใช้เวลาถึง 1 นาที)'),
+          SizedBox(height: 8),
+          LinearProgressIndicator(),
+        ],
+      ),
+    ),
+    false => Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          const Expanded(child: Text('ติดต่อ server ไม่ได้')),
+          TextButton(onPressed: onRetry, child: const Text('ลองใหม่')),
+        ],
+      ),
+    ),
+  };
 }

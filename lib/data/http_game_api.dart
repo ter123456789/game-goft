@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:coup_domain/coup_domain.dart';
@@ -18,6 +19,18 @@ class HttpGameApi implements GameApi {
   /// The current Supabase access token.
   final String? Function() accessToken;
   final http.Client _client;
+
+  @override
+  Future<bool> wakeUp() async {
+    try {
+      final response = await _client
+          .get(baseUrl.resolve('health'))
+          .timeout(const Duration(seconds: 90));
+      return response.statusCode == 200;
+    } on Exception {
+      return false;
+    }
+  }
 
   @override
   Future<({String roomId, String code})> createRoom(String displayName) async {

@@ -2,7 +2,7 @@
     <!-- Talks to Supabase and the game server. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="game_goft"
+        android:label="Coup"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

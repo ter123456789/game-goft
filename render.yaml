@@ -1,0 +1,24 @@
+# Render Blueprint for the Coup game server (free plan).
+# Dashboard > New > Blueprint > pick this repo. Render asks for the secret key.
+services:
+  - type: web
+    name: coup-server
+    runtime: docker
+    plan: free
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    # Only rebuild when the server or the rules change, not on app-only commits.
+    buildFilter:
+      paths:
+        - server/**
+        - packages/coup_domain/**
+        - render.yaml
+    envVars:
+      - key: SUPABASE_URL
+        value: https://xeuispkthkkjepsuwxpo.supabase.co
+      # The sb_secret_... key. Entered in the Render dashboard, never committed.
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: TURN_TIMEOUT_SECONDS
+        value: "30"

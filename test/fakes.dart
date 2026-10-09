@@ -19,6 +19,9 @@ class FakeApi implements GameApi {
   }
 
   @override
+  Future<bool> wakeUp() async => true;
+
+  @override
   Future<({String roomId, String code})> createRoom(String displayName) async =>
       (roomId: 'room', code: 'ABCDEF');
 
