@@ -15,8 +15,9 @@ import 'package:supabase/supabase.dart';
 /// working directory for local runs.
 Future<void> main() async {
   final env = {..._readDotEnv(File('.env')), ...Platform.environment};
+  final supabaseUrl = _required(env, 'SUPABASE_URL');
   final db = SupabaseClient(
-    _required(env, 'SUPABASE_URL'),
+    supabaseUrl,
     _required(env, 'SUPABASE_SERVICE_ROLE_KEY'),
     authOptions: const AuthClientOptions(autoRefreshToken: false),
   );
@@ -35,7 +36,9 @@ Future<void> main() async {
     InternetAddress.anyIPv4,
     int.parse(env['PORT'] ?? '8080'),
   );
-  stdout.writeln('Coup server listening on port ${server.port}');
+  stdout
+    ..writeln('Coup server listening on port ${server.port}')
+    ..writeln('Using Supabase at $supabaseUrl');
 
   _sweepTimeouts(service);
 }
@@ -49,8 +52,9 @@ void _sweepTimeouts(GameService service) {
     running = true;
     try {
       await service.expireOverdue();
-    } catch (e, stack) {
-      stderr.writeln('Timeout sweep failed: $e\n$stack');
+    } catch (e) {
+      // One line: this repeats every 2 seconds while the problem lasts.
+      stderr.writeln('Timeout sweep failed: ${'$e'.split('\n').first}');
     } finally {
       running = false;
     }
