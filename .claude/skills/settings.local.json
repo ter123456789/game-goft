@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(fvm flutter *)",
+      "Bash(flutter --version)",
+      "Bash(grep -viE \"sqflite|default factory|potential side|Be aware|warning|^\\\\s*$\")",
+      "Bash(grep -aoE \"PrintCpclUseCase forwards cpcl text \\\\[E\\\\].{0,600}\" /Users/thongpopchoo/.claude/projects/-Users-thongpopchoo-wfm-mobile/045bafe6-56a2-4774-9836-88bab5684562/tool-results/bvm3ekemr.txt)",
+      "Bash(grep -viE \"sqflite|default factory|potential side|Be aware|warning|changing sqflite|^\\\\s*$\")",
+      "Bash(echo \"--- exit code: $? ---\")",
+      "Bash(grep -viE \"loading /Users|^\\\\s*$\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(open\\('.vscode/launch.json'\\)\\); print\\('✓ launch.json valid —', len\\(d['configurations']\\), 'configs'\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(fvm list *)",
+      "Bash(fvm use *)",
+      "Bash(python3 -c \"import re,json; json.loads\\(re.sub\\(r'//.*','',open\\('.vscode/settings.json'\\).read\\(\\)\\)\\); print\\('✓ valid'\\)\")",
+      "Bash(curl -s -o /dev/null -w 'HTTP %{http_code} | connect %{time_connect}s | total %{time_total}s\\\\n' --connect-timeout 5 --max-time 10 http://172.17.56.217:7284/api/auth/login)",
+      "Bash(echo \"EXIT=$? \\(ไม่สามารถเชื่อมต่อได้\\)\")",
+      "Bash(git check-ignore *)",
+      "Bash(grep -rnaiE 'AIza[0-9A-Za-z_-]{10,}|geo.API_KEY|GMSServices|provideAPIKey|MAPS_API_KEY|googleMaps|maps.*api.*key' android/ ios/ lib/ web/)",
+      "Bash(cd *)",
+      "Bash(grep -nA15 \"assets:\" pubspec.yaml)",
+      "Bash(rm -f integration_test/dms_diss_submit_flow_test.dart integration_test/login_flow_test.dart test/integration_test/driver.dart)",
+      "Bash(rmdir integration_test test/integration_test)"
+    ]
+  }
+}
