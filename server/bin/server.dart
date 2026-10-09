@@ -16,9 +16,16 @@ import 'package:supabase/supabase.dart';
 Future<void> main() async {
   final env = {..._readDotEnv(File('.env')), ...Platform.environment};
   final supabaseUrl = _required(env, 'SUPABASE_URL');
+  final serviceKey = _required(env, 'SUPABASE_SERVICE_ROLE_KEY');
+  if (serviceKey.startsWith('sb_publishable_')) {
+    throw StateError(
+      'SUPABASE_SERVICE_ROLE_KEY is the publishable key. Use the secret key '
+      '(sb_secret_...) from Project Settings > API Keys.',
+    );
+  }
   final db = SupabaseClient(
     supabaseUrl,
-    _required(env, 'SUPABASE_SERVICE_ROLE_KEY'),
+    serviceKey,
     authOptions: const AuthClientOptions(autoRefreshToken: false),
   );
   final service = GameService(
