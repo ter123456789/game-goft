@@ -10,8 +10,11 @@ import 'package:supabase/supabase.dart';
 ///
 /// Required: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY.
 /// Optional: PORT (8080), TURN_TIMEOUT_SECONDS (30).
+///
+/// Values come from the environment, falling back to a `.env` file in the
+/// working directory for local runs.
 Future<void> main() async {
-  final env = Platform.environment;
+  final env = {..._readDotEnv(File('.env')), ...Platform.environment};
   final db = SupabaseClient(
     _required(env, 'SUPABASE_URL'),
     _required(env, 'SUPABASE_SERVICE_ROLE_KEY'),
@@ -54,5 +57,25 @@ void _sweepTimeouts(GameService service) {
   });
 }
 
-String _required(Map<String, String> env, String name) =>
-    env[name] ?? (throw StateError('Set the $name environment variable'));
+/// Parses `KEY=value` lines, skipping blanks and `#` comments.
+Map<String, String> _readDotEnv(File file) {
+  if (!file.existsSync()) return const {};
+  return {
+    for (final line in file.readAsLinesSync())
+      if (line.trim() case final l when l.isNotEmpty && !l.startsWith('#'))
+        if (l.indexOf('=') case final i when i > 0)
+          l.substring(0, i).trim(): _unquote(l.substring(i + 1).trim()),
+  };
+}
+
+String _unquote(String value) =>
+    value.length >= 2 &&
+        (value.startsWith('"') && value.endsWith('"') ||
+            value.startsWith("'") && value.endsWith("'"))
+    ? value.substring(1, value.length - 1)
+    : value;
+
+String _required(Map<String, String> env, String name) => switch (env[name]) {
+  final String value when value.isNotEmpty => value,
+  _ => throw StateError('Set $name in server/.env or the environment'),
+};
